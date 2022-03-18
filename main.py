@@ -43,7 +43,6 @@ cities = pd.DataFrame(data={
 
 
 #toronto
-
 start_lat, start_lon = 12.94315265341667, 80.14169879797205
 
 distances_km = []

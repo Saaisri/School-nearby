@@ -18,7 +18,8 @@ from math import radians, cos, sin, asin, sqrt
 app = Flask(__name__)
 app.secret_key = 'ItShouldBeAnythingButSecret'
 
-location  = {"Latitude": "12.6546315", "Longitude": "45.15651"}
+Latitude1=12.6546315
+Longitude1=45.15651
 
 @app.route('/', methods = ['POST', 'GET'])
 def get_values():
@@ -28,7 +29,7 @@ def get_values():
         location['Latitude'],location['Longitude'] = Latitude, Longitude
     return render_template("index.html")    
  
-@app.route('/result', methods = ['POST'])
+@app.route('/result')
 def distance_calculator():
 
     def haversine(lon1, lat1, lon2, lat2):
@@ -65,7 +66,7 @@ def distance_calculator():
 
     distances_km = []
     for row in cities.itertuples(index=False):
-        distances_km.append(haversine(location['Latitude'], location['Longitude'], row.Lat, row.Lon))
+        distances_km.append(haversine(Latitude1, Longitude1, row.Lat, row.Lon))
     
     # cities['DistanceFromNY'] = distances_km
     
