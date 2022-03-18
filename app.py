@@ -1,67 +1,126 @@
-import numpy as np
+from flask import  Flask,render_template, request
+from flask import *
+from math import radians
 import pandas as pd
-from math import radians, cos, sin, asin, acos, sqrt, pi
-from geopy import distance
-from geopy.geocoders import Nominatim
-import osmnx as ox
-import networkx as nx
-lat1, lon1 = -37.82120, 144.96441 # location 1
-lat2, lon2 = -37.88465,  145.08727 # location 2
+import numpy as np
+from math import radians, cos, sin, asin, sqrt
 
-def calculate_spherical_distance(lat1, lon1, lat2, lon2, r=6371):
-    # Convert degrees to radians
-    coordinates = lat1, lon1, lat2, lon2
-    # radians(c) is same as c*pi/180
-    phi1, lambda1, phi2, lambda2 = [
-        radians(c) for c in coordinates
-    ]  
+
+# app = Flask(__name__)
+
+
+# @app.route('/',methods = ['GET','POST'])
+
+#     return render_template('index.html',posts = distances_km)
+
+
+
+app = Flask(__name__)
+app.secret_key = 'ItShouldBeAnythingButSecret'
+
+location  = {"Latitude": "12.6546315", "Longitude": "45.15651"}
+
+@app.route('/', methods = ['POST', 'GET'])
+def get_values():
+    if(request.method == 'POST'):
+        Latitude = request.form.get('Latitude')
+        Longitude = request.form.get('Longitude') 
+
+        location = Latitude, Longitude
+        
+    return render_template("index.html")
+
+def distance_calculator():
+
+    def haversine(lon1, lat1, lon2, lat2):
+        """
+        Calculate the great circle distance in kilometers between two points 
+        on the earth (specified in decimal degrees)
+        """
+        # convert decimal degrees to radians 
+        lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
+
+        # haversine formula 
+        dlon = lon2 - lon1 
+        dlat = lat2 - lat1 
+        a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
+        c = 2 * asin(sqrt(a)) 
+        r = 6371 
+        # Radius of earth in kilometers. Use 3956 for miles. Determines return value units.
+        return c * r
+
+# cities_df = pd.read_csv('landmark.csv')
+
+# 43.90326739297604, -78.87011798647485
+
+    cities = pd.DataFrame(data={
+   'City': ['Osahwa', 'Miami', 'Chicago'],
+   'Lat' : [43.875081898250606, 25.7825453, 41.8339037],
+   'Lon' : [-78.85530108422006, -80.2994985, -87.8720471]
+})
+
+# cities_df['lat'] = np.radians(cities_df['lat'])
+# cities_df['lon'] = np.radians(cities_df['lon'])
+
+# cities_df.head()
+
+    start_lat, start_lon = 12.94315265341667, 80.14169879797205
+
+    distances_km = []
+
+    for row in cities.itertuples(index=False):
+        distances_km.append(haversine(start_lat, start_lon, row.Lat, row.Lon))
+
+    print(distances_km)
+    # cities['DistanceFromNY'] = distances_km
     
-    # Apply the haversine formula
-    a = (np.square(sin((phi2-phi1)/2)) + cos(phi1) * cos(phi2) * 
-         np.square(sin((lambda2-lambda1)/2)))
-    d = 2*r*asin(np.sqrt(a))
-    return d
-print(f"{calculate_spherical_distance(lat1, lon1, lat2, lon2):.4f} km")
 
-def calculate_spherical_distance(lat1, lon1, lat2, lon2, r=6371):
-    # Convert degrees to radians
-    coordinates = lat1, lon1, lat2, lon2
-    phi1, lambda1, phi2, lambda2 = [
-        radians(c) for c in coordinates
-    ]
-    
-    # Apply the haversine formula
-    d = r*acos(cos(phi2-phi1) - cos(phi1) * cos(phi2) *
-              (1-cos(lambda2-lambda1)))
-    return d
+    return "<h3>Current location entered</h3>"   
 
-print(f"{calculate_spherical_distance(lat1, lon1, lat2, lon2):.4f} km")
 
-print(f"{distance.great_circle((lat1, lon1), (lat2, lon2)).km:.4f} km")
+if __name__ == "__main__":
+     app.run(debug=True)
 
-mel_graph = ox.graph_from_place(
-    'Melbourne, Australia', network_type='drive', simplify=True
-)
-ox.plot_graph(mel_graph)
 
-orig_node = ox.distance.nearest_nodes(mel_graph, lon1, lat1)
-target_node = ox.distance.nearest_nodes(mel_graph, lon2, lat2)
-nx.shortest_path_length(G=mel_graph, source=orig_node, target=target_node, weight='length')
 
-def calculate_driving_distance(lat1, lon1, lat2, lon2):
-    # Get city and country name
-    geolocator = Nominatim(user_agent="geoapiExercises")
-    location = geolocator.reverse(f"{lat1}, {lon1}")
-    address = location.raw['address']
-    area = f"{address['city']}, {address['country']}"
-    # Get graph for the city
-    graph = ox.graph_from_place(area, network_type='drive', 
-                                simplify=True)
-    # Find shortest driving distance
-    orig_node = ox.distance.nearest_nodes(graph, lon1, lat1)
-    target_node = ox.distance.nearest_nodes(graph, lon2, lat2)
-    length = nx.shortest_path_length(G=graph, source=orig_node, 
-                                     target=target_node, weight='length')
-    return length / 1000 # convert from m to kms
-print(f"{calculate_driving_distance(lat1, lon1, lat2, lon2):.2f} km")
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# from flask import Flask, render_template, request, redirect, url_for
+# app = Flask(__name__)
+
+# @app.route('/')
+# def index():
+
+#     return render_template("index.html")
+
+# @app.route('/result',methods=['GET'])
+
+# # start_lat, start_lon = 12.94315265341667, 80.14169879797205
+
+
+# def result():
+
+
+
+# if __name__ == '__main__':
+#     app.run(debug = True)

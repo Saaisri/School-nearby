@@ -1,4 +1,15 @@
-from sklearn.neighbors import DistanceMetric
+'''
+Created on 
+Course work: 
+@author: Saaisri , Sivaraam
+Source:
+    
+'''
+
+# Source : https://towardsdatascience.com/heres-how-to-calculate-distance-between-2-geolocations-in-python-93ecab5bbba4
+
+# Find the set of schools near a given location
+
 from math import radians
 import pandas as pd
 import numpy as np
@@ -30,10 +41,8 @@ cities = pd.DataFrame(data={
    'Lon' : [-78.85530108422006, -80.2994985, -87.8720471]
 })
 
-# cities_df['lat'] = np.radians(cities_df['lat'])
-# cities_df['lon'] = np.radians(cities_df['lon'])
 
-# cities_df.head()
+#toronto
 
 start_lat, start_lon = 12.94315265341667, 80.14169879797205
 

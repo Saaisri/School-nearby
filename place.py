@@ -1,11 +1,8 @@
-
-
-
 #Importing the Nominatim geocoder class 
 from geopy.geocoders import Nominatim
  
 #address we need to geocode
-loc =  '48 Sandra St W, Oshawa'
+loc =  '41 Goodwin Ave, Clarington'
  
 #making an instance of Nominatim class
 geolocator = Nominatim(user_agent="my_request")
