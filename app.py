@@ -25,11 +25,10 @@ def get_values():
     if(request.method == 'POST'):
         Latitude = request.form.get('Latitude')
         Longitude = request.form.get('Longitude') 
-
-        location = Latitude, Longitude
-        
-    return render_template("index.html")
-
+        location['Latitude'],location['Longitude'] = Latitude, Longitude
+    return render_template("index.html")    
+ 
+@app.route('/result', methods = ['POST'])
 def distance_calculator():
 
     def haversine(lon1, lat1, lon2, lat2):
@@ -64,18 +63,14 @@ def distance_calculator():
 
 # cities_df.head()
 
-    start_lat, start_lon = 12.94315265341667, 80.14169879797205
-
     distances_km = []
-
     for row in cities.itertuples(index=False):
-        distances_km.append(haversine(start_lat, start_lon, row.Lat, row.Lon))
-
-    print(distances_km)
+        distances_km.append(haversine(location['Latitude'], location['Longitude'], row.Lat, row.Lon))
+    
     # cities['DistanceFromNY'] = distances_km
     
-
-    return "<h3>Current location entered</h3>"   
+    return render_template("result.html",dist = distances_km)
+    # return "<h3>Current location entered</h3>"   
 
 
 if __name__ == "__main__":
