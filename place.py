@@ -2,7 +2,7 @@
 from geopy.geocoders import Nominatim
  
 #address we need to geocode
-loc =  '41 Goodwin Ave, Clarington'
+loc = '164 Mead Boulevard Espanola Ontario '
  
 #making an instance of Nominatim class
 geolocator = Nominatim(user_agent="my_request")

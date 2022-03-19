@@ -3,8 +3,8 @@ from flask import *
 from math import radians
 import pandas as pd
 import numpy as np
+import csv
 from math import radians, cos, sin, asin, sqrt
-from geopy.geocoders import Nominatim
 
 
 # app = Flask(__name__)
@@ -19,21 +19,41 @@ from geopy.geocoders import Nominatim
 app = Flask(__name__)
 app.secret_key = 'ItShouldBeAnythingButSecret'
 
-location  = {"Latitude": "12.6546315", "Longitude": "45.15651"}
+
 
 @app.route('/', methods = ['POST', 'GET'])
 def get_values():
+    
+    return render_template("index.html")    
+ 
+@app.route('/result', methods = ['POST', 'GET'])
+def distance_calculator():
+
+    # Latitude=12.6546315
+    # Longitude=45.15651
+
     if(request.method == 'POST'):
         Latitude = request.form.get('Latitude')
         Longitude = request.form.get('Longitude') 
 
-        location = Latitude, Longitude
+        cities = pd.DataFrame(data={
+            'City': ['Osahwa', 'Miami', 'Chicago'],
+            'Lat' : [43.875081898250606, 25.7825453, 41.8339037],
+            'Lon' : [-78.85530108422006, -80.2994985, -87.8720471]
+        })
+
+        distances_km = []
+        for row in cities.itertuples(index=False):
+                distances_km.append(haversine(Latitude, Longitude, row.Lat, row.Lon))
         
-    return render_template("index.html")
+        return render_template("result.html",dist = distances_km)
 
-def distance_calculator():
+def haversine(lon1, lat1, lon2, lat2):
 
-    def haversine(lon1, lat1, lon2, lat2):
+        lon1 = float(lon1)
+        lat1 = float(lat1)
+        lon2 = float(lon2)
+        lat2 = float(lat2)
         """
         Calculate the great circle distance in kilometers between two points 
         on the earth (specified in decimal degrees)
@@ -54,29 +74,19 @@ def distance_calculator():
 
 # 43.90326739297604, -78.87011798647485
 
-    cities = pd.DataFrame(data={
-   'City': ['Osahwa', 'Miami', 'Chicago'],
-   'Lat' : [43.875081898250606, 25.7825453, 41.8339037],
-   'Lon' : [-78.85530108422006, -80.2994985, -87.8720471]
-})
+        
 
 # cities_df['lat'] = np.radians(cities_df['lat'])
 # cities_df['lon'] = np.radians(cities_df['lon'])
 
 # cities_df.head()
 
-    start_lat, start_lon = 12.94315265341667, 80.14169879797205
-
-    distances_km = []
-
-    for row in cities.itertuples(index=False):
-        distances_km.append(haversine(start_lat, start_lon, row.Lat, row.Lon))
-
-    print(distances_km)
+    
+    
     # cities['DistanceFromNY'] = distances_km
     
-
-    return "<h3>Current location entered</h3>"   
+    
+    # return "<h3>Current location entered</h3>"   
 
 
 if __name__ == "__main__":
