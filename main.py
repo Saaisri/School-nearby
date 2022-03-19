@@ -1,14 +1,3 @@
-'''
-Created on 
-Course work: 
-@author: Saaisri , Sivaraam
-Source:
-    
-'''
-
-# Source : https://towardsdatascience.com/heres-how-to-calculate-distance-between-2-geolocations-in-python-93ecab5bbba4
-
-# Find the set of schools near a given location
 
 from math import radians
 import pandas as pd
