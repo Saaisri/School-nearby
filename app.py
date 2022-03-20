@@ -20,20 +20,22 @@ app.secret_key = 'ItShouldBeAnythingButSecret'
 
 @app.route('/', methods = ['POST', 'GET'])
 def get_values():   
-    return render_template("index.html")    
+        return render_template("index.html")    
  
 @app.route('/result', methods = ['POST', 'GET'])
 def distance_calculator():
-    if(request.method == 'POST'):
-        Latitude = request.form.get('Latitude')
-        Longitude = request.form.get('Longitude') 
+
+        if(request.method == 'POST'):
+            Latitude = request.form.get('Latitude')
+            Longitude = request.form.get('Longitude')
+
         #Reading datas from CSV and import as Dataframe 
         loc_df = pd.read_csv('sample.csv') 
         
         #Stores the distances in list
         distances_km = []
         for row in loc_df.itertuples(index=False):
-                distances_km.append(haversine(Latitude, Longitude, row[2], row[3]))
+            distances_km.append(haversine(Latitude, Longitude, row[2], row[3]))
         
         #Adding the distances as new column to the dataframe
         loc_df['Distance']= distances_km
