@@ -13,7 +13,7 @@ def lat_lon(loc):
     return location
 
 # only read specific columns from an excel file
-loc_df = pd.read_csv('sample.csv')
+loc_df = pd.read_excel('private_school_contact_list_feb_2022-en.xlsx', usecols = [0, 6] , sheet_name = "Private Schools in Ontario")
 lat = []
 lon = []
 for i in range(len(loc_df)):

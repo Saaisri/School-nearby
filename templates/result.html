@@ -1,9 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Schools Nearby</title>
 </head>
 <body>
+<<<<<<< Updated upstream
             <p>{{ dist}}</p>
+=======
+{% for table in tables %}
+            {{titles[loop.index]}}
+            {{ table|safe }}
+{% endfor %}
+>>>>>>> Stashed changes
 </body>
 </html>
